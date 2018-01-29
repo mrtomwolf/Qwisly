@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Qwisly</string>
+    <string name="question_title">The quest for questions!</string>
+    <string name="question">This is a question.</string>
+    <string name="question2">This is another question.</string>
+    <string name="question3">This is a third question.</string>
+    <string name="question4">This is the last question.</string>
+    <string name="answer_no">No</string>
+    <string name="answer_yes">Yes</string>
+    <string name="navigation_next">Next</string>
+    <string name="navigation_previous">Back</string>
+    <string name="submit">Submit</string>
+</resources>
