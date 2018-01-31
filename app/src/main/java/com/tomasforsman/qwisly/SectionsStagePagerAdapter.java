@@ -1,5 +1,7 @@
 package com.tomasforsman.qwisly;
 
+import android.app.Activity;
+import android.arch.lifecycle.ViewModelProviders;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;

@@ -1,5 +1,6 @@
 package com.tomasforsman.qwisly;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,20 +23,16 @@ public class MainActivity extends AppCompatActivity {
     private RadioButton rbNo;
     private RadioButton rbYes;
 
-    private String rightAnswer;
-    private int scoreCount;
-    private String scoreCountText;
-    private int quizCount = 1;
-
 
     //For fragments
-    private int currentView = 0;
+    //private int mViewModel.currentView = 0;
     private static final String TAG = "MainActivity";
     public SectionsStagePagerAdapter mSectionsStatePagerAdapter;
-    private ViewPager mViewPager;
-    public String currentViewText;
-    private boolean firstVisit;
-    private boolean[] answered;
+
+    //private boolean[][] mViewModel.answered;
+    public MainViewModel mViewModel;
+    public ViewPager mViewPager;
+
 
 
 
@@ -52,28 +49,59 @@ public class MainActivity extends AppCompatActivity {
             {"Another no Question", "No"}
     };
     //Answers
-    boolean[] arrayAnswers;
+    
+
+    //Todo: SharedPreferences
+    //Todo: Database
+    //Todo: Update questions
+    //Todo: HighScore
+    //Todo: RecycleView
+    //Todo: SplashScreen
+    //Todo: Categories
+    //Todo: Random questions
+    //Todo: Timer
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+
+
         Log.d(TAG, "onCreate: Started.");
 
         rbNo = (RadioButton) findViewById(R.id.rbNo);
         rbYes = (RadioButton) findViewById(R.id.rbYes);
         btnNext = (Button) findViewById(R.id.btnNavNext);
         btnPrev = (Button) findViewById(R.id.btnNavPrevious);
-        arrayAnswers = new boolean[questionsData.length];
+
         mSectionsStatePagerAdapter = new SectionsStagePagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        answered = new boolean[questionsData.length];
+
+
+        if(mViewModel.currentView == -1){ //If this is when we first start the activity.
+            mViewModel.currentView = 0;
+            mViewPager = (ViewPager) findViewById(R.id.container);
+            setupViewPager(mViewPager);
+
+        }else{
+            mViewPager = (ViewPager) findViewById(R.id.container);
+            mViewPager.setAdapter(mViewModel.adapter);
+
+        }
+
+
+
+        setAnswersArray();
+        mViewModel.answered = new boolean[questionsData.length];
+        mViewModel.arrayUserAnswers = new boolean[questionsData.length];
 
         rbNo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 rbNo.setChecked(true);
                 rbYes.setChecked(false);
-                setAnswer("No");
+                mViewModel.answered[mViewModel.currentView] = true;
+                mViewModel.arrayUserAnswers[mViewModel.currentView] = false;
+                generateScore();
             }
         });
 
@@ -81,26 +109,22 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 rbNo.setChecked(false);
                 rbYes.setChecked(true);
-                setAnswer("Yes");
+                mViewModel.answered[mViewModel.currentView] = true;
+                mViewModel.arrayUserAnswers[mViewModel.currentView] = true;
+                generateScore();
             }
+
         });
 
-
-
-
-        setupViewPager(mViewPager);
-        //final Button btnYes = (Button) findViewById(R.id.btnNavNext);
-        //final Button btnNo = (Button) findViewById(R.id.btnNavPrevious);
 
 
 
         btnNext.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Toast.makeText(getApplicationContext(), "Next", Toast.LENGTH_SHORT).show();
-                if (currentView < 3){
-                    currentView +=1;
-                    setViewPager(currentView);
+                if (mViewModel.currentView < 3){
+                    mViewModel.currentView +=1;
+                    setViewPager(mViewModel.currentView);
                 }
             }
         });
@@ -108,66 +132,60 @@ public class MainActivity extends AppCompatActivity {
         btnPrev.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                if (currentView > 0){
-                    currentView -=1;
-                    setViewPager(currentView);
+                if (mViewModel.currentView > 0){
+                    mViewModel.currentView -=1;
+                    setViewPager(mViewModel.currentView);
                 }
-                Toast.makeText(getApplicationContext(), "Previous", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void setAnswer(String answer) {
-
-        if(answer.equals("Yes")){
-            //Toast.makeText(getApplicationContext(), "YEAH!", Toast.LENGTH_SHORT).show();
-             arrayAnswers[currentView] = true;
-             showRights();
-        }else{
-            //Toast.makeText(getApplicationContext(), "Nah", Toast.LENGTH_SHORT).show();
-            arrayAnswers[currentView] = false;
-            showRights();
-        }
-        answered[currentView] = true;
-    }
-
-    private void showRights(){
-        scoreCount = 0;
-        for (int i = 0; i < arrayAnswers.length; i++) {
-            if(arrayAnswers[i] && questionsData[i][1].equals("Yes")){
-                scoreCount += 1;
-            }else if(!arrayAnswers[i] && questionsData[i][1].equals("No")){
-                scoreCount += 1;
+    private void setAnswersArray(){
+        mViewModel.arrayAnswers = new boolean[questionsData.length];
+        for (int i = 0; i < mViewModel.arrayAnswers.length; i++){
+            if(questionsData[i][1].equals("Yes")){
+                mViewModel.arrayAnswers[i] = true;
             }
         }
-        scoreCountText = Integer.toString(scoreCount);
 
-        Toast.makeText(getApplicationContext(), scoreCountText, Toast.LENGTH_SHORT).show();
+    }
+
+    private void generateScore(){
+        mViewModel.scoreCount = 0;
+        for (int i = 0; i < mViewModel.arrayAnswers.length; i++){
+            if(mViewModel.arrayAnswers[i] == mViewModel.arrayUserAnswers[i] && mViewModel.answered[i]){
+
+                mViewModel.scoreCount++;
+            }
+        }
+        mViewModel.scoreCountText = Integer.toString(mViewModel.scoreCount);
+
+        Toast.makeText(getApplicationContext(), mViewModel.scoreCountText, Toast.LENGTH_SHORT).show();
     }
 
     public void setYesNo(int i){
 
-        if (arrayAnswers[i]){
+        if (mViewModel.answered[i]){
+            if(mViewModel.arrayUserAnswers[i]){
+                rbNo.setChecked(false);
+                rbYes.setChecked(true);
+            }else{
+                rbNo.setChecked(true);
+                rbYes.setChecked(false);
+            }
+        }else{
             rbNo.setChecked(false);
-            rbYes.setChecked(true);
-        } else if(!answered[i]){
-            rbNo.setChecked(false);
-            rbYes.setChecked(false);
-        } else if (!arrayAnswers[i]){
-            rbNo.setChecked(true);
             rbYes.setChecked(false);
         }
-
-
     }
 
     private void setupViewPager(ViewPager viewPager){
-        SectionsStagePagerAdapter adapter = mSectionsStatePagerAdapter; //new SectionsStagePagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new FragmentQuestion1(), "FragmentQuestion1");
-        adapter.addFragment(new FragmentQuestion2(), "FragmentQuestion2");
-        adapter.addFragment(new FragmentQuestion3(), "FragmentQuestion3");
-        adapter.addFragment(new FragmentQuestion4(), "FragmentQuestion4");
-        viewPager.setAdapter(adapter);
+        mViewModel.adapter = mSectionsStatePagerAdapter; //new SectionsStagePagerAdapter(getSupportFragmentManager());
+        mViewModel.adapter.addFragment(new FragmentQuestion1(), "FragmentQuestion1");
+        mViewModel.adapter.addFragment(new FragmentQuestion2(), "FragmentQuestion2");
+        mViewModel.adapter.addFragment(new FragmentQuestion3(), "FragmentQuestion3");
+        mViewModel.adapter.addFragment(new FragmentQuestion4(), "FragmentQuestion4");
+        viewPager.setAdapter(mViewModel.adapter);
     }
 
 
