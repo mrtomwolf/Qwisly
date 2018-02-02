@@ -1,7 +1,8 @@
-package com.tomasforsman.qwisly;
+package com.tomasforsman.qwisly.viewmodel;
 
 import android.arch.lifecycle.ViewModel;
-import android.support.v4.view.ViewPager;
+
+
 
 public class MainViewModel extends ViewModel {
     // Tracks the score
@@ -10,9 +11,9 @@ public class MainViewModel extends ViewModel {
     public int currentView = -1;
     public String currentViewText;
     public boolean[] answered;
-    boolean[] arrayAnswers;
-    boolean[] arrayUserAnswers;
+    public boolean[] arrayAnswers;
+    public boolean[] arrayUserAnswers;
 
-    public SectionsStagePagerAdapter adapter;
+
 
 }
