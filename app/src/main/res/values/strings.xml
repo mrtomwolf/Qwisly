@@ -1,13 +1,16 @@
 <resources>
     <string name="app_name">Qwisly</string>
-    <string name="question_title">The quest for questions!</string>
-    <string name="question">This is a question.</string>
-    <string name="question2">This is another question.</string>
-    <string name="question3">This is a third question.</string>
-    <string name="question4">This is the last question.</string>
+    <string name="ListItem_title">The quest for ListItems!</string>
+    <string name="ListItem">This is a ListItem.</string>
+    <string name="ListItem2">This is another ListItem.</string>
+    <string name="ListItem3">This is a third ListItem.</string>
+    <string name="ListItem4">This is the last ListItem.</string>
     <string name="answer_no">False</string>
     <string name="answer_yes">True</string>
     <string name="navigation_next">Next</string>
     <string name="navigation_previous">Back</string>
     <string name="submit">Submit</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

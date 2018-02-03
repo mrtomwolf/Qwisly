@@ -1,4 +1,4 @@
-package com.tomasforsman.qwisly.view;
+package com.tomasforsman.qwisly.submit;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
