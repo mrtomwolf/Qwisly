@@ -25,8 +25,9 @@ import com.tomasforsman.qwisly.QwislyApplication;
 import com.tomasforsman.qwisly.data.Question;
 
 import com.tomasforsman.qwisly.R;
-import com.tomasforsman.qwisly.viewmodel.ListItemCollectionViewModel;
-import com.tomasforsman.qwisly.viewmodel.NewListItemViewModel;
+import com.tomasforsman.qwisly.viewmodel.QuestionCollectionViewModel;
+import com.tomasforsman.qwisly.viewmodel.NewQuestionViewModel;
+import com.tomasforsman.qwisly.viewmodel.QuestionViewModel;
 
 
 import java.util.List;
@@ -62,13 +63,14 @@ public class MainFragment extends Fragment {
     private RecyclerView recyclerView;
     private CustomAdapter adapter;
     private Button btnSubmit;
-    private NewListItemViewModel newListItemViewModel;
+    private NewQuestionViewModel newQuestionViewModel;
+    private QuestionViewModel questionViewModel;
 
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
-    ListItemCollectionViewModel ListItemCollectionViewModel;
+    QuestionCollectionViewModel QuestionCollectionViewModel;
 
 
 
@@ -108,10 +110,10 @@ public class MainFragment extends Fragment {
         // Todo: After Udacity course, update to ViewModelProvider.AndroidViewModelFactory
         // Architecture Components 1.1.0 update 22/1 - 18
         // https://developer.android.com/topic/libraries/architecture/release-notes.html
-        ListItemCollectionViewModel = ViewModelProviders.of(this, viewModelFactory)
-                .get(ListItemCollectionViewModel.class);
+        QuestionCollectionViewModel = ViewModelProviders.of(this, viewModelFactory)
+                .get(QuestionCollectionViewModel.class);
 
-        ListItemCollectionViewModel.getListItems().observe(this, new Observer<List<Question>>() {
+        QuestionCollectionViewModel.getListItems().observe(this, new Observer<List<Question>>() {
             @Override
             public void onChanged(@Nullable List<Question> questions) {
                 if (MainFragment.this.listOfData == null) {
@@ -119,10 +121,16 @@ public class MainFragment extends Fragment {
                 }
             }
         });
+
         //Set up and subscribe (observe) to the ViewModel
-        newListItemViewModel = ViewModelProviders.of(this, viewModelFactory)
-                .get(NewListItemViewModel.class);
+        newQuestionViewModel = ViewModelProviders.of(this, viewModelFactory)
+                .get(NewQuestionViewModel.class);
+        questionViewModel = ViewModelProviders.of(this, viewModelFactory)
+                .get(QuestionViewModel.class);
     }
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -169,7 +177,7 @@ public class MainFragment extends Fragment {
             for(int n = 0; n < questions.length; n++){
                 //Question l = new Question(n,questions[n][0], questions[n][1], questions[n][2]);
                 Question l = new Question(questions[n][0], questions[n][1], questions[n][2]);
-                newListItemViewModel.addNewItemToDatabase(l);
+                newQuestionViewModel.addNewItemToDatabase(l);
 
             }
 
@@ -194,6 +202,7 @@ public class MainFragment extends Fragment {
     private class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder>{
 
 
+
         @Override
         public CustomAdapter.CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = layoutInflater.inflate(R.layout.fragment_question, parent, false);
@@ -211,6 +220,7 @@ public class MainFragment extends Fragment {
                     currentItem.getQuestion()
             );
             holder.answer = currentItem.getAnswer();
+
 
         }
 
@@ -232,10 +242,17 @@ public class MainFragment extends Fragment {
             private String answer;
             private Boolean yes;
             private Boolean no;
+            private Fragment mFragment;
+            private QuestionViewModel questionViewModel;
+            private int tempInt;
+            private String rd;
+
 
 
             public CustomViewHolder(View itemView) {
                 super(itemView);
+
+
 
                 this.rbNo = (RadioButton) itemView.findViewById(R.id.rbNo);
                 this.rbYes = (RadioButton) itemView.findViewById(R.id.rbYes);
@@ -243,7 +260,7 @@ public class MainFragment extends Fragment {
 
                 this.container = (ViewGroup) itemView.findViewById(R.id.root_ListItem);
 
-
+                this.tempInt = getAdapterPosition();
 
 
                 this.rbNo.setOnClickListener(this);
@@ -255,15 +272,22 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-
-                this.txtQuestion.setText(answer);
-
-                Question question = listOfData.get(
-                        this.getAdapterPosition()
-                );
+                if(view == rbNo) {
+                    rd = "No";
+                    this.rbYes.setVisibility(View.INVISIBLE);
+                }else if(view == rbYes){
+                    rd = "Yes";
+                    this.rbNo.setVisibility(View.INVISIBLE);
+                }
+                if (rd.equals(answer)) {
+                    this.txtQuestion.setText("correct");
+                }else{
+                    this.txtQuestion.setText("wrong");
+                }
 
 
             }
         }
     }
+
 }

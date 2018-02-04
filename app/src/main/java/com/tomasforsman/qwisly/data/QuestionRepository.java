@@ -6,12 +6,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ListItemRepository {
+public class QuestionRepository {
 
     private final QuestionDao QuestionDao;
 
     @Inject
-    public ListItemRepository (QuestionDao QuestionDao){
+    public QuestionRepository(QuestionDao QuestionDao){
         this.QuestionDao = QuestionDao;
     }
 

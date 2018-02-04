@@ -20,11 +20,11 @@ package com.tomasforsman.qwisly;
 
 import android.app.Application;
 
-import com.tomasforsman.qwisly.dependencyinjection.ApplicationComponent;
-import com.tomasforsman.qwisly.dependencyinjection.ApplicationModule;
-import com.tomasforsman.qwisly.dependencyinjection.RoomModule;
+import com.tomasforsman.qwisly.injection.ApplicationComponent;
+import com.tomasforsman.qwisly.injection.ApplicationModule;
+import com.tomasforsman.qwisly.injection.RoomModule;
 
-import com.tomasforsman.qwisly.dependencyinjection.DaggerApplicationComponent;
+import com.tomasforsman.qwisly.injection.DaggerApplicationComponent;
 
 
 public class QwislyApplication extends Application {

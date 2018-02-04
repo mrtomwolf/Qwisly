@@ -19,7 +19,7 @@
  *  * Has been changed just enough to suit my own application.
  *  * Tomas Forsman
  */
-package com.tomasforsman.qwisly.dependencyinjection;
+package com.tomasforsman.qwisly.injection;
 
 import android.app.Application;
 import android.arch.lifecycle.ViewModelProvider;
@@ -31,19 +31,19 @@ import dagger.Module;
 import dagger.Provides;
 
 import com.tomasforsman.qwisly.data.QuestionDao;
-import com.tomasforsman.qwisly.data.ListItemDatabase;
-import com.tomasforsman.qwisly.data.ListItemRepository;
+import com.tomasforsman.qwisly.data.QwislyDatabase;
+import com.tomasforsman.qwisly.data.QuestionRepository;
 import com.tomasforsman.qwisly.viewmodel.CustomViewModelFactory;
 
 @Module
 public class RoomModule {
 
-    private final ListItemDatabase database;
+    private final QwislyDatabase database;
 
     public RoomModule(final Application application) {
         this.database = Room.databaseBuilder(
                 application,
-                ListItemDatabase.class,
+                QwislyDatabase.class,
                 "Question.db")
                 .fallbackToDestructiveMigration()
                 .build();
@@ -51,25 +51,25 @@ public class RoomModule {
 
     @Provides
     @Singleton
-    ListItemRepository provideListItemRepository(QuestionDao QuestionDao){
-        return new ListItemRepository(QuestionDao);
+    QuestionRepository provideListItemRepository(QuestionDao QuestionDao){
+        return new QuestionRepository(QuestionDao);
     }
 
     @Provides
     @Singleton
-    QuestionDao provideListItemDao(ListItemDatabase database){
+    QuestionDao provideListItemDao(QwislyDatabase database){
         return database.listItemDao();
     }
 
     @Provides
     @Singleton
-    ListItemDatabase provideListItemDatabase(Application application){
+    QwislyDatabase provideListItemDatabase(Application application){
         return database;
     }
 
     @Provides
     @Singleton
-    ViewModelProvider.Factory provideViewModelFactory(ListItemRepository repository){
+    ViewModelProvider.Factory provideViewModelFactory(QuestionRepository repository){
         return new CustomViewModelFactory(repository);
     }
 }

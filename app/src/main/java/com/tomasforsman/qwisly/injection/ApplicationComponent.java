@@ -20,30 +20,27 @@
  *  * Tomas Forsman
  */
 
-package com.tomasforsman.qwisly.dependencyinjection;
+package com.tomasforsman.qwisly.injection;
 
 import android.app.Application;
 
-import dagger.Module;
-import dagger.Provides;
-import com.tomasforsman.qwisly.QwislyApplication;
+import com.tomasforsman.qwisly.main.MainFragment;
+import com.tomasforsman.qwisly.main.QuestionFragment;
+import com.tomasforsman.qwisly.submit.SubmitFragment;
 
-@Module
-public class ApplicationModule {
-    private final QwislyApplication application;
-    public ApplicationModule(QwislyApplication application) {
-        this.application = application;
-    }
+import javax.inject.Singleton;
 
-    @Provides
-    QwislyApplication provideQwislyApplication(){
-        return application;
-    }
+import dagger.Component;
 
-    @Provides
-    Application provideApplication(){
-        return application;
-    }
+@Singleton
+@Component(modules = {ApplicationModule.class, RoomModule.class})
+public interface ApplicationComponent {
 
+    void inject(MainFragment mainFragment);
+    void inject(SubmitFragment submitFragment);
+    void inject(QuestionFragment questionFragment);
+
+    Application application();
 
 }
+

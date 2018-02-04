@@ -1,5 +1,6 @@
 package com.tomasforsman.qwisly.main;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
@@ -10,7 +11,7 @@ import com.tomasforsman.qwisly.R;
 import com.tomasforsman.qwisly.util.BaseActivity;
 
 public class MainActivity extends BaseActivity {
-    private static final String LIST_FRAG = "LIST_FRAG";
+    private static final String MAIN_FRAG = "MAIN_FRAG";
 
 
     @Override
@@ -19,8 +20,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         FragmentManager manager = getSupportFragmentManager();
-
-        MainFragment fragment = (MainFragment) manager.findFragmentByTag(LIST_FRAG);
+        MainFragment fragment = (MainFragment) manager.findFragmentByTag(MAIN_FRAG);
 
         if (fragment == null) {
             fragment = MainFragment.newInstance();
@@ -29,7 +29,7 @@ public class MainActivity extends BaseActivity {
         addFragmentToActivity(manager,
                 fragment,
                 R.id.root_main_activity,
-                LIST_FRAG
+                MAIN_FRAG
         );
 
     }

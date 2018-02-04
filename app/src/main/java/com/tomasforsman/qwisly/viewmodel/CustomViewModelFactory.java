@@ -25,31 +25,31 @@ import android.util.Log;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import com.tomasforsman.qwisly.data.ListItemRepository;
+import com.tomasforsman.qwisly.data.QuestionRepository;
 
 
 @Singleton
 public class CustomViewModelFactory implements ViewModelProvider.Factory {
-    private final ListItemRepository repository;
+    private final QuestionRepository repository;
 
     @Inject
-    public CustomViewModelFactory(ListItemRepository repository) {
+    public CustomViewModelFactory(QuestionRepository repository) {
         this.repository = repository;
     }
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        if (modelClass.isAssignableFrom(ListItemCollectionViewModel.class)) {
+        if (modelClass.isAssignableFrom(QuestionCollectionViewModel.class)) {
             Log.d("CVM", "LICV");
-            return (T) new ListItemCollectionViewModel(repository);
+            return (T) new QuestionCollectionViewModel(repository);
 
-        }else if (modelClass.isAssignableFrom(ListItemViewModel.class)) {
+        }else if (modelClass.isAssignableFrom(QuestionViewModel.class)) {
             Log.d("CVM", "LIVM");
-            return (T) new ListItemViewModel(repository);
+            return (T) new QuestionViewModel(repository);
 
-        }else if (modelClass.isAssignableFrom(NewListItemViewModel.class)) {
+        }else if (modelClass.isAssignableFrom(NewQuestionViewModel.class)) {
                 Log.d("CVM", "NLIVM");
-                return (T) new NewListItemViewModel(repository);
+                return (T) new NewQuestionViewModel(repository);
         }else if (modelClass.isAssignableFrom(MainFragmentViewModel.class)) {
             Log.d("CVM", "NLIVM");
             return (T) new MainFragmentViewModel(repository);

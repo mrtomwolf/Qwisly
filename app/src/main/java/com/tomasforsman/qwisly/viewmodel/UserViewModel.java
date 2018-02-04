@@ -21,21 +21,28 @@ package com.tomasforsman.qwisly.viewmodel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.tomasforsman.qwisly.data.Question;
-import com.tomasforsman.qwisly.data.ListItemRepository;
+
+import com.tomasforsman.qwisly.data.User;
+import com.tomasforsman.qwisly.data.UserRepository;
 
 
-public class ListItemViewModel extends ViewModel {
+public class UserViewModel extends ViewModel {
 
-    private ListItemRepository repository;
+    private UserRepository repository;
+    private String txtTest = "standard";
 
-
-    ListItemViewModel(ListItemRepository repository) {
+    UserViewModel(UserRepository repository) {
         this.repository = repository;
     }
+    public String getTxt(){
+        return txtTest;
+    }
+    public void setTxt(String s){
+        txtTest = s;
+    }
 
-    public LiveData<Question> getListItemById(String itemId){
-       return repository.getListItem(itemId);
+    public LiveData<User> getUserById(String userId){
+        return repository.getUser(userId);
     }
 
 }

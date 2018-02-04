@@ -2,12 +2,12 @@ package com.tomasforsman.qwisly.viewmodel;
 
 import android.arch.lifecycle.ViewModel;
 
-import com.tomasforsman.qwisly.data.ListItemRepository;
+import com.tomasforsman.qwisly.data.QuestionRepository;
 
 public class MainFragmentViewModel extends ViewModel{
-    private ListItemRepository repository;
+    private QuestionRepository repository;
 
-    MainFragmentViewModel(ListItemRepository repository) {
+    MainFragmentViewModel(QuestionRepository repository) {
         this.repository = repository;
     }
 

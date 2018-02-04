@@ -18,37 +18,31 @@
 
 package com.tomasforsman.qwisly.viewmodel;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
-import android.os.AsyncTask;
-import android.util.Log;
 
 import com.tomasforsman.qwisly.data.Question;
-import com.tomasforsman.qwisly.data.ListItemRepository;
+import com.tomasforsman.qwisly.data.QuestionRepository;
 
-public class NewListItemViewModel extends ViewModel {
 
-    private ListItemRepository repository;
+public class QuestionViewModel extends ViewModel {
 
-    NewListItemViewModel(ListItemRepository repository) {
+    private QuestionRepository repository;
+    private String txtTest = "standard";
+
+    QuestionViewModel(QuestionRepository repository) {
         this.repository = repository;
     }
-
-    /**
-     * Attach our LiveData to the Database
-     */
-    public void addNewItemToDatabase(Question question){
-        Log.d("addNewItemToDatabase", "1");
-       new AddItemTask().execute(question);
+    public String getTxt(){
+        return txtTest;
+    }
+    public void setTxt(String s){
+        txtTest = s;
     }
 
-    private class AddItemTask extends AsyncTask<Question, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Question... item) {
-            Log.d("NewListViewModel", "doInBackground 1");
-            repository.createNewListItem(item[0]);
-            Log.d("NewListViewModel", "doInBackground 2");
-            return null;
-        }
+    public LiveData<Question> getListItemById(String itemId){
+       return repository.getListItem(itemId);
     }
+
 }
+
