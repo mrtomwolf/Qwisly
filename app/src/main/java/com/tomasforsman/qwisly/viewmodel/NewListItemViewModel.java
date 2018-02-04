@@ -20,10 +20,9 @@ package com.tomasforsman.qwisly.viewmodel;
 
 import android.arch.lifecycle.ViewModel;
 import android.os.AsyncTask;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.tomasforsman.qwisly.data.ListItem;
+import com.tomasforsman.qwisly.data.Question;
 import com.tomasforsman.qwisly.data.ListItemRepository;
 
 public class NewListItemViewModel extends ViewModel {
@@ -37,15 +36,15 @@ public class NewListItemViewModel extends ViewModel {
     /**
      * Attach our LiveData to the Database
      */
-    public void addNewItemToDatabase(ListItem listItem){
+    public void addNewItemToDatabase(Question question){
         Log.d("addNewItemToDatabase", "1");
-       new AddItemTask().execute(listItem);
+       new AddItemTask().execute(question);
     }
 
-    private class AddItemTask extends AsyncTask<ListItem, Void, Void> {
+    private class AddItemTask extends AsyncTask<Question, Void, Void> {
 
         @Override
-        protected Void doInBackground(ListItem... item) {
+        protected Void doInBackground(Question... item) {
             Log.d("NewListViewModel", "doInBackground 1");
             repository.createNewListItem(item[0]);
             Log.d("NewListViewModel", "doInBackground 2");

@@ -1,9 +1,7 @@
 package com.tomasforsman.qwisly.viewmodel;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.tomasforsman.qwisly.data.ListItem;
 import com.tomasforsman.qwisly.data.ListItemRepository;
 
 public class MainFragmentViewModel extends ViewModel{

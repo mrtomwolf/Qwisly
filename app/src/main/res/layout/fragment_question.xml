@@ -39,7 +39,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:fontFamily="sans-serif"
-        android:text="ListItem"
+        android:text="Question"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@android:color/black"
         android:textSize="24sp"
@@ -49,6 +49,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="ListItem" />
+        tools:text="Question" />
 
 </android.support.constraint.ConstraintLayout>

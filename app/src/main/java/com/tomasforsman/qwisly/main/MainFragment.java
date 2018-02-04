@@ -22,7 +22,7 @@ import android.widget.TextView;
 
 
 import com.tomasforsman.qwisly.QwislyApplication;
-import com.tomasforsman.qwisly.data.ListItem;
+import com.tomasforsman.qwisly.data.Question;
 
 import com.tomasforsman.qwisly.R;
 import com.tomasforsman.qwisly.viewmodel.ListItemCollectionViewModel;
@@ -56,7 +56,7 @@ import javax.inject.Inject;
  */
 public class MainFragment extends Fragment {
 
-    private List<ListItem> listOfData;
+    private List<Question> listOfData;
 
     private LayoutInflater layoutInflater;
     private RecyclerView recyclerView;
@@ -111,11 +111,11 @@ public class MainFragment extends Fragment {
         ListItemCollectionViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(ListItemCollectionViewModel.class);
 
-        ListItemCollectionViewModel.getListItems().observe(this, new Observer<List<ListItem>>() {
+        ListItemCollectionViewModel.getListItems().observe(this, new Observer<List<Question>>() {
             @Override
-            public void onChanged(@Nullable List<ListItem> listItems) {
+            public void onChanged(@Nullable List<Question> questions) {
                 if (MainFragment.this.listOfData == null) {
-                    setListData(listItems);
+                    setListData(questions);
                 }
             }
         });
@@ -151,7 +151,7 @@ public class MainFragment extends Fragment {
 
 
 
-    public void setListData(List<ListItem> listOfData){
+    public void setListData(List<Question> listOfData){
 
         this.listOfData = listOfData;
         if(listOfData.size()<1){
@@ -167,8 +167,8 @@ public class MainFragment extends Fragment {
 
             };
             for(int n = 0; n < questions.length; n++){
-                //ListItem l = new ListItem(n,questions[n][0], questions[n][1], questions[n][2]);
-                ListItem l = new ListItem(questions[n][0], questions[n][1], questions[n][2]);
+                //Question l = new Question(n,questions[n][0], questions[n][1], questions[n][2]);
+                Question l = new Question(questions[n][0], questions[n][1], questions[n][2]);
                 newListItemViewModel.addNewItemToDatabase(l);
 
             }
@@ -193,6 +193,7 @@ public class MainFragment extends Fragment {
     //-------------------------------------------------------------------------------------//
     private class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder>{
 
+
         @Override
         public CustomAdapter.CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = layoutInflater.inflate(R.layout.fragment_question, parent, false);
@@ -202,8 +203,10 @@ public class MainFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(CustomAdapter.CustomViewHolder holder, int position) {
+            Question currentItem = listOfData.get(position);
+            //----------------------
 
-            ListItem currentItem = listOfData.get(position);
+
             holder.txtQuestion.setText(
                     currentItem.getQuestion()
             );
@@ -227,6 +230,8 @@ public class MainFragment extends Fragment {
             private TextView txtQuestion;
             private ViewGroup container;
             private String answer;
+            private Boolean yes;
+            private Boolean no;
 
 
             public CustomViewHolder(View itemView) {
@@ -253,7 +258,7 @@ public class MainFragment extends Fragment {
 
                 this.txtQuestion.setText(answer);
 
-                ListItem ListItem = listOfData.get(
+                Question question = listOfData.get(
                         this.getAdapterPosition()
                 );
 

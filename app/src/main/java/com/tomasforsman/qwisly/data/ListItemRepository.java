@@ -8,27 +8,27 @@ import javax.inject.Inject;
 
 public class ListItemRepository {
 
-    private final ListItemDao ListItemDao;
+    private final QuestionDao QuestionDao;
 
     @Inject
-    public ListItemRepository (ListItemDao ListItemDao){
-        this.ListItemDao = ListItemDao;
+    public ListItemRepository (QuestionDao QuestionDao){
+        this.QuestionDao = QuestionDao;
     }
 
-    public LiveData<ListItem> getListItem(String itemId){
-        return ListItemDao.getListItemById(itemId);
+    public LiveData<Question> getListItem(String itemId){
+        return QuestionDao.getListItemById(itemId);
     }
 
-    public LiveData<List<ListItem>> getListOfData(){
-        return ListItemDao.getListItems();
+    public LiveData<List<Question>> getListOfData(){
+        return QuestionDao.getListItems();
     }
 
-    public Long createNewListItem(ListItem ListItem){
-        return ListItemDao.insertListItem(ListItem);
+    public Long createNewListItem(Question question){
+        return QuestionDao.insertListItem(question);
     }
 
-    public void deleteListItem (ListItem ListItem){
-        ListItemDao.deleteListItem(ListItem);
+    public void deleteListItem (Question question){
+        QuestionDao.deleteListItem(question);
     }
 
 

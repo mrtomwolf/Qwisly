@@ -7,7 +7,7 @@ import android.util.Log;
 
 
 @Entity
-public class ListItem {
+public class Question {
 
 
     @NonNull
@@ -17,14 +17,16 @@ public class ListItem {
     private String answer;
     private String fact;
 
-    //public ListItem(int itemId, String question, String answer, String fact) {
-    public ListItem(String question, String answer, String fact) {
+
+    //public Question(int itemId, String question, String answer, String fact) {
+    public Question(String question, String answer, String fact) {
         //this.itemId = itemId;
         this.question = question;
         this.answer = answer;
         this.fact = fact;
-        //Log.d(TAG, "ListItem()" + question + answer + fact);
+        //Log.d(TAG, "Question()" + question + answer + fact);
     }
+
 
     public String getQuestion() {
         return question;

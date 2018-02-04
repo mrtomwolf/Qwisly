@@ -21,7 +21,7 @@ package com.tomasforsman.qwisly.viewmodel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.tomasforsman.qwisly.data.ListItem;
+import com.tomasforsman.qwisly.data.Question;
 import com.tomasforsman.qwisly.data.ListItemRepository;
 
 
@@ -30,15 +30,11 @@ public class ListItemViewModel extends ViewModel {
     private ListItemRepository repository;
 
 
-    public String getTxtSample(String answer){
-        return answer;
-    }
-
     ListItemViewModel(ListItemRepository repository) {
         this.repository = repository;
     }
 
-    public LiveData<ListItem> getListItemById(String itemId){
+    public LiveData<Question> getListItemById(String itemId){
        return repository.getListItem(itemId);
     }
 

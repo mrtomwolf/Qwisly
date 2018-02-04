@@ -11,23 +11,23 @@ import android.arch.persistence.room.Query;
 import java.util.List;
 
 @Dao
-public interface ListItemDao {
+public interface QuestionDao {
 
 
-    @Query("SELECT * FROM ListItem")
-    LiveData<List<ListItem>> getListItems();
+    @Query("SELECT * FROM Question")
+    LiveData<List<Question>> getListItems();
 
-    @Query("SELECT * FROM ListItem WHERE itemId = :itemId")
-    LiveData<ListItem> getListItemById(String itemId);
+    @Query("SELECT * FROM Question WHERE itemId = :itemId")
+    LiveData<Question> getListItemById(String itemId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Long insertListItem(ListItem ListItem);
+    Long insertListItem(Question question);
 
     @Delete
-    void deleteListItem(ListItem ListItem);
+    void deleteListItem(Question question);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertListItems(ListItem... ListItem);
+    void insertListItems(Question... Question);
 
 
 
