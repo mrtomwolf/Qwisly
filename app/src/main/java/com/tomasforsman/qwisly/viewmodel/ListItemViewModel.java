@@ -24,13 +24,15 @@ import android.arch.lifecycle.ViewModel;
 import com.tomasforsman.qwisly.data.ListItem;
 import com.tomasforsman.qwisly.data.ListItemRepository;
 
-/**
- * Created by R_KAY on 8/3/2017.
- */
 
 public class ListItemViewModel extends ViewModel {
 
     private ListItemRepository repository;
+
+
+    public String getTxtSample(String answer){
+        return answer;
+    }
 
     ListItemViewModel(ListItemRepository repository) {
         this.repository = repository;

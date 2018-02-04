@@ -24,9 +24,9 @@ public class ListItemCollectionViewModel extends ViewModel {
     // AyncTask for "proper and easy use of the UI thread.
     // https://developer.android.com/reference/android/os/AsyncTask.html
 
-    public void deleteListItem(ListItem ListItem){
+    public void deleteListItem(ListItem listItem){
         DeleteItemTask task = new DeleteItemTask();
-        task.execute(ListItem);
+        task.execute(listItem);
     }
 
     private class DeleteItemTask extends AsyncTask<ListItem, Void, Void>{

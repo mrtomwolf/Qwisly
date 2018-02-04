@@ -3,6 +3,7 @@ package com.tomasforsman.qwisly.main;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
+import android.support.v7.widget.RecyclerView;
 
 
 import com.tomasforsman.qwisly.R;
@@ -32,4 +33,6 @@ public class MainActivity extends BaseActivity {
         );
 
     }
+
+
 }

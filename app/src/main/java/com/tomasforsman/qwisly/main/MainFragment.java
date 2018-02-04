@@ -6,21 +6,17 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
-import android.support.v4.content.ContextCompat;
 
 
 import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -28,10 +24,9 @@ import android.widget.TextView;
 import com.tomasforsman.qwisly.QwislyApplication;
 import com.tomasforsman.qwisly.data.ListItem;
 
-import com.tomasforsman.qwisly.submit.SubmitActivity;
 import com.tomasforsman.qwisly.R;
 import com.tomasforsman.qwisly.viewmodel.ListItemCollectionViewModel;
-
+import com.tomasforsman.qwisly.viewmodel.NewListItemViewModel;
 
 
 import java.util.List;
@@ -66,12 +61,16 @@ public class MainFragment extends Fragment {
     private LayoutInflater layoutInflater;
     private RecyclerView recyclerView;
     private CustomAdapter adapter;
+    private Button btnSubmit;
+    private NewListItemViewModel newListItemViewModel;
 
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
     ListItemCollectionViewModel ListItemCollectionViewModel;
+
+
 
     public MainFragment() {
         // Required empty public constructor
@@ -87,7 +86,8 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+        //setRetainInstance(true);
+
 
         // Dagger2 Get components from ApplicationComponent.class
         // Components: mainFragment createFragment submitFragment
@@ -103,6 +103,7 @@ public class MainFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+
         // Using the ViewModel Factory to create the ViewModel
         // Todo: After Udacity course, update to ViewModelProvider.AndroidViewModelFactory
         // Architecture Components 1.1.0 update 22/1 - 18
@@ -112,18 +113,21 @@ public class MainFragment extends Fragment {
 
         ListItemCollectionViewModel.getListItems().observe(this, new Observer<List<ListItem>>() {
             @Override
-            public void onChanged(@Nullable List<ListItem> ListItems) {
+            public void onChanged(@Nullable List<ListItem> listItems) {
                 if (MainFragment.this.listOfData == null) {
-                    setListData(ListItems);
+                    setListData(listItems);
                 }
             }
         });
+        //Set up and subscribe (observe) to the ViewModel
+        newListItemViewModel = ViewModelProviders.of(this, viewModelFactory)
+                .get(NewListItemViewModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.item_question, container, false);
+        View v = inflater.inflate(R.layout.fragment_main, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.list_container);
         layoutInflater = getLayoutInflater();
 
@@ -131,9 +135,8 @@ public class MainFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
+    public void onResume(){
         super.onResume();
-
     }
 
     @Override
@@ -146,13 +149,34 @@ public class MainFragment extends Fragment {
         super.onDetach();
     }
 
-    public void startSubmitActivity(String ListItem, String answer, String fact, int theId) {
 
-    }
 
     public void setListData(List<ListItem> listOfData){
 
         this.listOfData = listOfData;
+        if(listOfData.size()<1){
+
+            Log.d("ItemCount: ", "0");
+
+            String[][] questions = {
+
+                    {"USA have had a president named Chester Arthur","Yes","He became president in 1881 when James Garfield was murdered."},
+                    {"Sweden is famous for their chocolate", "No","It's actually Switzerland who has the chocolate. Sweden is a norse country famous for Abba, Vikings and Ikea."},
+                    {"The Christian cross is the most recognised symbol in the world", "No","More people recognise the McDonalds symbol than the Christian cross."},
+                    {"The largest ant colony in the world is more than 10 km from side to side","Yes","In 2000 a new supercolony was found spanning 6000km along the Mediterranean and Atlantic coasts in Southern Europe."}
+
+            };
+            for(int n = 0; n < questions.length; n++){
+                //ListItem l = new ListItem(n,questions[n][0], questions[n][1], questions[n][2]);
+                ListItem l = new ListItem(questions[n][0], questions[n][1], questions[n][2]);
+                newListItemViewModel.addNewItemToDatabase(l);
+
+            }
+
+
+        }else{
+            Log.d("ItemCount: ","" + String.valueOf(listOfData.size()));
+        }
 
 
         //Todo: Look up GridLayoutManager and StaggeredGridLayoutManager
@@ -165,11 +189,14 @@ public class MainFragment extends Fragment {
 
     }
 
+    //-------------------------------------------------------------------------------------//
+    //-------------------------------------------------------------------------------------//
     private class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder>{
 
         @Override
         public CustomAdapter.CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = layoutInflater.inflate(R.layout.item_question, parent, false);
+            View v = layoutInflater.inflate(R.layout.fragment_question, parent, false);
+
             return new CustomViewHolder(v);
         }
 
@@ -177,23 +204,29 @@ public class MainFragment extends Fragment {
         public void onBindViewHolder(CustomAdapter.CustomViewHolder holder, int position) {
 
             ListItem currentItem = listOfData.get(position);
-            holder.txtListItem.setText(
-                    currentItem.getListItem()
+            holder.txtQuestion.setText(
+                    currentItem.getQuestion()
             );
+            holder.answer = currentItem.getAnswer();
 
         }
 
         @Override
         public int getItemCount() {
-            return listOfData.size();
+           return listOfData.size();
         }
 
+
+
+        //-------------------------------------------------------------------------------------//
+        //-------------------------------------------------------------------------------------//
         class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             private RadioButton rbYes;
             private RadioButton rbNo;
-            private TextView txtListItem;
+            private TextView txtQuestion;
             private ViewGroup container;
+            private String answer;
 
 
             public CustomViewHolder(View itemView) {
@@ -201,9 +234,10 @@ public class MainFragment extends Fragment {
 
                 this.rbNo = (RadioButton) itemView.findViewById(R.id.rbNo);
                 this.rbYes = (RadioButton) itemView.findViewById(R.id.rbYes);
-                this.txtListItem = (TextView) itemView.findViewById(R.id.txtListItem);
+                this.txtQuestion = (TextView) itemView.findViewById(R.id.txtListItem);
 
                 this.container = (ViewGroup) itemView.findViewById(R.id.root_ListItem);
+
 
 
 
@@ -217,7 +251,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                this.txtListItem.setText("woop");
+                this.txtQuestion.setText(answer);
 
                 ListItem ListItem = listOfData.get(
                         this.getAdapterPosition()

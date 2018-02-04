@@ -23,29 +23,38 @@ package com.tomasforsman.qwisly.dependencyinjection;
 
 import android.app.Application;
 import android.arch.lifecycle.ViewModelProvider;
+import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Room;
+import android.arch.persistence.room.RoomDatabase;
+import android.support.annotation.NonNull;
+import android.util.Log;
+import android.view.View;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 
+import com.tomasforsman.qwisly.data.ListItem;
 import com.tomasforsman.qwisly.data.ListItemDao;
 import com.tomasforsman.qwisly.data.ListItemDatabase;
 import com.tomasforsman.qwisly.data.ListItemRepository;
 import com.tomasforsman.qwisly.viewmodel.CustomViewModelFactory;
+
+import java.util.concurrent.Executors;
 
 @Module
 public class RoomModule {
 
     private final ListItemDatabase database;
 
-    public RoomModule(Application application) {
+    public RoomModule(final Application application) {
         this.database = Room.databaseBuilder(
                 application,
                 ListItemDatabase.class,
-                "ListItem.db"
-        ).build();
+                "ListItem.db")
+                .fallbackToDestructiveMigration()
+                .build();
     }
 
     @Provides

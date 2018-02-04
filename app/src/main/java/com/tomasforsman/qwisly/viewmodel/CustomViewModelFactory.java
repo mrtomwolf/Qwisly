@@ -20,6 +20,7 @@ package com.tomasforsman.qwisly.viewmodel;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
+import android.util.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -38,16 +39,21 @@ public class CustomViewModelFactory implements ViewModelProvider.Factory {
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        if (modelClass.isAssignableFrom(ListItemCollectionViewModel.class))
+        if (modelClass.isAssignableFrom(ListItemCollectionViewModel.class)) {
+            Log.d("CVM", "LICV");
             return (T) new ListItemCollectionViewModel(repository);
 
-        else if (modelClass.isAssignableFrom(ListItemViewModel.class))
+        }else if (modelClass.isAssignableFrom(ListItemViewModel.class)) {
+            Log.d("CVM", "LIVM");
             return (T) new ListItemViewModel(repository);
 
-        else if (modelClass.isAssignableFrom(NewListItemViewModel.class))
-            return (T) new NewListItemViewModel(repository);
-
-        else {
+        }else if (modelClass.isAssignableFrom(NewListItemViewModel.class)) {
+                Log.d("CVM", "NLIVM");
+                return (T) new NewListItemViewModel(repository);
+        }else if (modelClass.isAssignableFrom(MainFragmentViewModel.class)) {
+            Log.d("CVM", "NLIVM");
+            return (T) new MainFragmentViewModel(repository);
+        }else {
             throw new IllegalArgumentException("ViewModel Not Found");
         }
     }
